@@ -116,6 +116,23 @@ int __cdecl main()
         "      16 [Number]\n" );
   std::cout << '\n';
 
+  /*
+  parser.Parse( "x = \"id\" + \"42\"" );
+  std::cout << parser;
+  test( parser.AllTokensValid() );
+  test( parser.GetToken( 1 ) == Token( TokenType::Assign, "=" ) );
+  ast = parser.GetAST();
+  strStream = {};
+  strStream << *ast;
+  std::cout << strStream.str();
+  test( strStream.str() ==
+    "= [Assign]\n"
+    "  + [Plus]\n"
+    "    id [String]\n"
+    "    42 [String]\n" );
+  std::cout << '\n';
+  */
+
   // Handle common error conditions
   parser.Parse( "(" );
   std::cout << parser;
