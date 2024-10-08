@@ -88,7 +88,7 @@ int __cdecl main()
   test( parser.GetToken( 3 ) == Token( TokenType::Multiply, "*" ) );
   auto ast = parser.GetAST();
   std::stringstream strStream;
-  strStream << ast;
+  strStream << *ast;
   std::cout << strStream.str() << '\n';
   test( strStream.str() ==
     "+ [Plus]\n"
@@ -104,7 +104,7 @@ int __cdecl main()
   test( parser.GetToken( 4 ) == Token( TokenType::OpenParen, "(" ) );
   ast = parser.GetAST();
   strStream = {};
-  strStream << ast;
+  strStream << *ast;
   std::cout << strStream.str();
   test( strStream.str() ==
         "+ [Plus]\n"
@@ -114,6 +114,12 @@ int __cdecl main()
         "    * [Multiply]\n"
         "      24 [Number]\n"
         "      16 [Number]\n" );
+
+  // Handle common error conditions
+  parser.Parse( "(" );
+  ast = parser.GetAST();
+  test( !ast );
+  std::cout << ast.error().GetErrorMessage();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
