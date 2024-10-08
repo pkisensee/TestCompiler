@@ -114,12 +114,20 @@ int __cdecl main()
         "    * [Multiply]\n"
         "      24 [Number]\n"
         "      16 [Number]\n" );
+  std::cout << '\n';
 
   // Handle common error conditions
   parser.Parse( "(" );
+  std::cout << parser;
   ast = parser.GetAST();
   test( !ast );
-  std::cout << ast.error().GetErrorMessage();
+  std::cout << ast.error().GetErrorMessage() << "\n\n";
+
+  parser.Parse( ")" );
+  std::cout << parser;
+  ast = parser.GetAST();
+  test( !ast );
+  std::cout << ast.error().GetErrorMessage() << "\n\n";
 }
 
 ///////////////////////////////////////////////////////////////////////////////
