@@ -76,11 +76,20 @@ int __cdecl main()
   test( parser.GetToken( i++ ) == Token( TokenType::IsEqual, "==" ) );
   test( parser.GetToken( i++ ) == Token( TokenType::Identifier, "nottingham" ) );
 
-  parser.Parse( "bar = 42 + 1 / 24 * 16;" );
+  parser.Parse( "facts == true" );
+  std::cout << parser << '\n';
+  test( parser.AllTokensValid() );
+  i = 0;
+  test( parser.GetToken( i++ ) == Token( TokenType::Identifier, "facts" ) );
+  test( parser.GetToken( i++ ) == Token( TokenType::IsEqual, "==" ) );
+  test( parser.GetToken( i++ ) == Token( TokenType::True, "true" ) );
+
+  parser.Parse( "bar = 42 + 1 / 24 * 16 + false;" );
   std::cout << parser << '\n';
   test( parser.AllTokensValid() );
   test( parser.GetToken( 3 ) == Token( TokenType::Plus, "+" ) );
   test( parser.GetToken( 6 ) == Token( TokenType::Number, "24" ) );
+  test( parser.GetToken( 10 ) == Token( TokenType::False, "false" ) );
 
   parser.Parse( "1 + 2 * 3" );
   std::cout << parser;
