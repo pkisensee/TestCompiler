@@ -106,41 +106,66 @@ int __cdecl main()
     "    2 [Number]\n"
     "    3 [Number]\n" );
 
-  parser.Parse( "42 + 1 / (24 * 16)" );
+  parser.Parse( "(42 + 1) / (2 * 3)" );
   std::cout << parser;
   test( parser.AllTokensValid() );
-  test( parser.GetToken( 0 ) == Token( TokenType::Number, "42" ) );
-  test( parser.GetToken( 4 ) == Token( TokenType::OpenParen, "(" ) );
+  test( parser.GetToken( 0 ) == Token( TokenType::OpenParen, "(" ) );
+  test( parser.GetToken( 3 ) == Token( TokenType::Number, "1" ) );
   ast = parser.GetAST();
   strStream = {};
   strStream << *ast;
   std::cout << strStream.str();
   test( strStream.str() ==
-        "+ [Plus]\n"
-        "  42 [Number]\n"
-        "  / [Divide]\n"
+        "/ [Divide]\n"
+        "  + [Plus]\n"
+        "    42 [Number]\n"
         "    1 [Number]\n"
-        "    * [Multiply]\n"
-        "      24 [Number]\n"
-        "      16 [Number]\n" );
+        "  * [Multiply]\n"
+        "    2 [Number]\n"
+        "    3 [Number]\n" );
+  Interpreter interpreter;
+  auto result = interpreter.Evaluate( ast->GetExpr() );
+  std::cout << "Result: " << *result << '\n';
+  test( result == Value{ 7 } );
   std::cout << '\n';
 
-  /*
-  parser.Parse( "x = \"id\" + \"42\"" );
+  parser.Parse( "\"id\" + \"42\"" );
   std::cout << parser;
   test( parser.AllTokensValid() );
-  test( parser.GetToken( 1 ) == Token( TokenType::Assign, "=" ) );
+  test( parser.GetToken( 2 ) == Token( TokenType::String, "42" ) );
   ast = parser.GetAST();
   strStream = {};
   strStream << *ast;
   std::cout << strStream.str();
   test( strStream.str() ==
-    "= [Assign]\n"
-    "  + [Plus]\n"
-    "    id [String]\n"
-    "    42 [String]\n" );
+    "+ [Plus]\n"
+    "  id [String]\n"
+    "  42 [String]\n" );
+  result = interpreter.Evaluate( ast->GetExpr() );
+  std::cout << "Result: " << *result << '\n';
+  test( result == Value{ std::string( "id42" ) } );
   std::cout << '\n';
-  */
+
+  parser.Parse( "(42 + \"str\") / \"23\" * true" );
+  std::cout << parser;
+  test( parser.AllTokensValid() );
+  ast = parser.GetAST();
+  test( ast.has_value() );
+  result = interpreter.Evaluate( ast->GetExpr() );
+  test( !result.has_value() );
+  std::cout << "Result: " << result.error().GetErrorMessage() << '\n';
+  std::cout << '\n';
+
+  parser.Parse( "(42 + \"0\") / \"23\" * true" );
+  std::cout << parser;
+  test( parser.AllTokensValid() );
+  ast = parser.GetAST();
+  test( ast.has_value() );
+  result = interpreter.Evaluate( ast->GetExpr() );
+  test( result.has_value() );
+  std::cout << "Result: " << *result << '\n';
+  test( result == Value{ 1 } );
+  std::cout << '\n';
 
   // Handle common error conditions
   parser.Parse( "(" );
