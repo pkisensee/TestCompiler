@@ -124,7 +124,7 @@ int __cdecl main()
         "    2 [Number]\n"
         "    3 [Number]\n" );
   Interpreter interpreter;
-  auto result = interpreter.Evaluate( ast->GetExpr() );
+  auto result = interpreter.Evaluate( ast->GetRoot() );
   std::cout << "Result: " << *result << '\n';
   test( result == Value{ 7 } );
   std::cout << '\n';
@@ -141,7 +141,7 @@ int __cdecl main()
     "+ [Plus]\n"
     "  id [String]\n"
     "  42 [String]\n" );
-  result = interpreter.Evaluate( ast->GetExpr() );
+  result = interpreter.Evaluate( ast->GetRoot() );
   std::cout << "Result: " << *result << '\n';
   test( result == Value{ std::string( "id42" ) } );
   std::cout << '\n';
@@ -151,7 +151,7 @@ int __cdecl main()
   test( parser.AllTokensValid() );
   ast = parser.GetAST();
   test( ast.has_value() );
-  result = interpreter.Evaluate( ast->GetExpr() );
+  result = interpreter.Evaluate( ast->GetRoot() );
   test( !result.has_value() );
   std::cout << "Result: " << result.error().GetErrorMessage() << '\n';
   std::cout << '\n';
@@ -161,7 +161,7 @@ int __cdecl main()
   test( parser.AllTokensValid() );
   ast = parser.GetAST();
   test( ast.has_value() );
-  result = interpreter.Evaluate( ast->GetExpr() );
+  result = interpreter.Evaluate( ast->GetRoot() );
   test( result.has_value() );
   std::cout << "Result: " << *result << '\n';
   test( result == Value{ 1 } );
