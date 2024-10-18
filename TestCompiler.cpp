@@ -167,6 +167,17 @@ int __cdecl main()
   test( result == Value{ 1 } );
   std::cout << '\n';
 
+  parser.Parse( "x = 42;" );
+  std::cout << parser;
+  test( parser.AllTokensValid() );
+  ast = parser.GetAST();
+  test( ast.has_value() );
+  result = interpreter.Evaluate( ast->GetRoot() );
+  test( result.has_value() );
+  std::cout << "Result: " << *result << '\n';
+  test( result == Value{ 42 } );
+  std::cout << '\n';
+
   // Handle common error conditions
   parser.Parse( "(" );
   std::cout << parser;
