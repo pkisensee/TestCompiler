@@ -165,6 +165,9 @@
     <ProjectReference Include="..\Compiler\Compiler.vcxproj">
       <Project>{358724b2-f402-4695-97ab-3e8e7ec9d4d1}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\File\File.vcxproj">
+      <Project>{a2a617b6-2015-48e9-bf8b-76e18fdc0043}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\String\String.vcxproj">
       <Project>{cd2abb7c-efea-4f49-90f3-3b2337e81b11}</Project>
     </ProjectReference>

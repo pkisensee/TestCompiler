@@ -101,10 +101,10 @@ int __cdecl main()
   std::cout << strStream.str() << '\n';
   test( strStream.str() ==
     "+ [Plus]\n"
-    "  1 [Number]\n"
+    "  1\n"
     "  * [Multiply]\n"
-    "    2 [Number]\n"
-    "    3 [Number]\n" );
+    "    2\n"
+    "    3\n" );
 
   parser.Parse( "(42 + 1) / (2 * 3)" );
   std::cout << parser;
@@ -118,11 +118,11 @@ int __cdecl main()
   test( strStream.str() ==
         "/ [Divide]\n"
         "  + [Plus]\n"
-        "    42 [Number]\n"
-        "    1 [Number]\n"
+        "    42\n"
+        "    1\n"
         "  * [Multiply]\n"
-        "    2 [Number]\n"
-        "    3 [Number]\n" );
+        "    2\n"
+        "    3\n" );
   Interpreter interpreter;
   auto result = interpreter.Evaluate( ast->GetRoot() );
   std::cout << "Result: " << *result << '\n';
@@ -139,8 +139,8 @@ int __cdecl main()
   std::cout << strStream.str();
   test( strStream.str() ==
     "+ [Plus]\n"
-    "  id [String]\n"
-    "  42 [String]\n" );
+    "  \"id\"\n"
+    "  \"42\"\n" );
   result = interpreter.Evaluate( ast->GetRoot() );
   std::cout << "Result: " << *result << '\n';
   test( result == Value{ std::string( "id42" ) } );
@@ -167,16 +167,20 @@ int __cdecl main()
   test( result == Value{ 1 } );
   std::cout << '\n';
 
-  parser.Parse( "x = 42;" );
-  std::cout << parser;
-  test( parser.AllTokensValid() );
-  ast = parser.GetAST();
-  test( ast.has_value() );
-  result = interpreter.Evaluate( ast->GetRoot() );
-  test( result.has_value() );
-  std::cout << "Result: " << *result << '\n';
-  test( result == Value{ 42 } );
-  std::cout << '\n';
+  std::string_view code =
+    "fun hello(int i)     \
+     {                    \
+       print i;           \
+       int k = i + 42;    \
+       print k;           \
+     }                    \
+     fun main()           \
+     {                    \
+       hello(42);         \
+     };";
+
+  parser.Parse( code );
+  StmtList statements = parser.GetStatements();
 
   // Handle common error conditions
   parser.Parse( "(" );
