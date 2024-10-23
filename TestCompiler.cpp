@@ -177,7 +177,7 @@ int __cdecl main()
      fun main()           \
      {                    \
        hello(42);         \
-     };";
+     }";
 
   parser.Parse( code );
   StmtList statements = parser.GetStatements();
