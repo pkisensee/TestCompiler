@@ -177,10 +177,12 @@ int __cdecl main()
      fun main()           \
      {                    \
        hello(42);         \
-     }";
+     }                    \
+     main();";
 
   parser.Parse( code );
   StmtList statements = parser.GetStatements();
+  interpreter.Execute( statements, interpreter.GetGlobalsEnv() );
 
   // Handle common error conditions
   parser.Parse( "(" );
