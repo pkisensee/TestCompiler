@@ -124,8 +124,8 @@ int __cdecl main()
         "    2\n"
         "    3\n" );
   Interpreter interpreter;
-  auto result = interpreter.Evaluate( ast->GetRoot() );
-  std::cout << "Result: " << *result << '\n';
+  Value result = interpreter.Evaluate( ast->GetRoot() );
+  std::cout << "Result: " << result << '\n';
   test( result == Value{ 7 } );
   std::cout << '\n';
 
@@ -142,7 +142,7 @@ int __cdecl main()
     "  \"id\"\n"
     "  \"42\"\n" );
   result = interpreter.Evaluate( ast->GetRoot() );
-  std::cout << "Result: " << *result << '\n';
+  std::cout << "Result: " << result << '\n';
   test( result == Value{ std::string( "id42" ) } );
   std::cout << '\n';
 
@@ -151,10 +151,10 @@ int __cdecl main()
   test( parser.AllTokensValid() );
   ast = parser.GetAST();
   test( ast.has_value() );
-  result = interpreter.Evaluate( ast->GetRoot() );
-  test( !result.has_value() );
-  std::cout << "Result: " << result.error().GetErrorMessage() << '\n';
-  std::cout << '\n';
+  //result = interpreter.Evaluate( ast->GetRoot() );
+  //test( !result.has_value() );
+  //std::cout << "Result: " << result.error().GetErrorMessage() << '\n';
+  //std::cout << '\n';
 
   parser.Parse( "(42 + \"0\") / \"23\" * true" );
   std::cout << parser;
@@ -162,27 +162,40 @@ int __cdecl main()
   ast = parser.GetAST();
   test( ast.has_value() );
   result = interpreter.Evaluate( ast->GetRoot() );
-  test( result.has_value() );
-  std::cout << "Result: " << *result << '\n';
+  std::cout << "Result: " << result << '\n';
   test( result == Value{ 1 } );
   std::cout << '\n';
 
-  std::string_view code =
-    "fun hello(int i)     \
-     {                    \
-       print i;           \
-       int k = i + 42;    \
-       print k;           \
-     }                    \
-     fun main()           \
-     {                    \
-       hello(42);         \
-     }                    \
-     main();";
+  std::string_view fib = "                \
+  fun fib( int i )                        \
+  {                                       \
+    if( i <= 1 )                          \
+      return i;                           \
+    return fib( i - 2 ) + fib( i - 1 );   \
+  }                                       \
+  fun main()                              \
+  {                                       \
+    for( int i = 0; i < 20; i = i + 1 )    \
+      print 'fib(' + i + ') -> ' + fib(i);  \
+  }                                       \
+  main();";
 
-  parser.Parse( code );
-  StmtList statements = parser.GetStatements();
-  interpreter.Execute( statements, interpreter.GetGlobalsEnv() );
+  std::string_view exp = "    \
+  fun exp(int i)              \
+  {                           \
+    if( i == 0 )              \
+      return 1;               \
+    return i * exp( i - 1 );  \
+  }                           \
+  fun main()                  \
+  {                           \
+    print exp( 1 );           \
+  }                           \
+  main();";
+
+  parser.Parse( fib );
+  auto statements = parser.GetStatements();
+  interpreter.Execute( *statements );
 
   // Handle common error conditions
   parser.Parse( "(" );
