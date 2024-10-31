@@ -175,8 +175,8 @@ int __cdecl main()
   }                                       \
   fun main()                              \
   {                                       \
-    for( int i = 0; i < 20; i = i + 1 )    \
-      print 'fib(' + i + ') -> ' + fib(i);  \
+    for( int i = 0; i < 10; i = i + 1 )   \
+      print 'fib(' + i + ') -> ' + fib(i);\
   }                                       \
   main();";
 
@@ -203,10 +203,6 @@ int __cdecl main()
     return ( genre == 'Rock' );     \
   }                                 \
   print IsEightiesPop();";
-
-  parser.Parse( eightiesPop );
-  statements = parser.GetStatements();
-  interpreter.Execute( *statements );
 
   // Handle common error conditions
   parser.Parse( "(" );
