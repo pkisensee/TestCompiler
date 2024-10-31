@@ -197,6 +197,17 @@ int __cdecl main()
   auto statements = parser.GetStatements();
   interpreter.Execute( *statements );
 
+  std::string_view eightiesPop = "  \
+  fun IsEightiesPop()               \
+  {                                 \
+    return ( genre == 'Rock' );     \
+  }                                 \
+  print IsEightiesPop();";
+
+  parser.Parse( eightiesPop );
+  statements = parser.GetStatements();
+  interpreter.Execute( *statements );
+
   // Handle common error conditions
   parser.Parse( "(" );
   std::cout << parser;
