@@ -64,11 +64,11 @@ int __cdecl main()
   std::cout << parser << '\n';
   test( parser.AllTokensValid() );
 
-  parser.Parse( "'String Literal A' \"String Literal B\"" );
+  parser.Parse( "'String Literal A', \"String Literal B\"" );
   std::cout << parser << '\n';
   test( parser.AllTokensValid() );
 
-  parser.Parse( "orchid == nottingham" );
+  parser.Parse( "orchid == nottingham" ); // don't mistake keywords or and not in identifiers
   std::cout << parser << '\n';
   test( parser.AllTokensValid() );
   i = 0;
@@ -76,20 +76,21 @@ int __cdecl main()
   test( parser.GetToken( i++ ) == Token( TokenType::IsEqual, "==" ) );
   test( parser.GetToken( i++ ) == Token( TokenType::Identifier, "nottingham" ) );
 
-  parser.Parse( "facts == true" );
+  parser.Parse( "facts0_ == true" );
   std::cout << parser << '\n';
   test( parser.AllTokensValid() );
   i = 0;
-  test( parser.GetToken( i++ ) == Token( TokenType::Identifier, "facts" ) );
+  test( parser.GetToken( i++ ) == Token( TokenType::Identifier, "facts0_" ) );
   test( parser.GetToken( i++ ) == Token( TokenType::IsEqual, "==" ) );
   test( parser.GetToken( i++ ) == Token( TokenType::True, "true" ) );
 
-  parser.Parse( "bar = 42 + 1 / 24 * 16 + false;" );
+  parser.Parse( "foo.bar = 42 + 1 / 24 * 16 + false;" );
   std::cout << parser << '\n';
   test( parser.AllTokensValid() );
-  test( parser.GetToken( 3 ) == Token( TokenType::Plus, "+" ) );
-  test( parser.GetToken( 6 ) == Token( TokenType::Number, "24" ) );
-  test( parser.GetToken( 10 ) == Token( TokenType::False, "false" ) );
+  test( parser.GetToken( 1 ) == Token( TokenType::Dot, "." ) );
+  test( parser.GetToken( 5 ) == Token( TokenType::Plus, "+" ) );
+  test( parser.GetToken( 8 ) == Token( TokenType::Number, "24" ) );
+  test( parser.GetToken( 12 ) == Token( TokenType::False, "false" ) );
 
   parser.Parse( "1 + 2 * 3" );
   std::cout << parser;
@@ -146,7 +147,7 @@ int __cdecl main()
   test( result == Value{ std::string( "id42" ) } );
   std::cout << '\n';
 
-  parser.Parse( "(42 + \"str\") / \"23\" * true" );
+  parser.Parse( "(42.42 + \"str\") / \"23\" * true" );
   std::cout << parser;
   test( parser.AllTokensValid() );
   ast = parser.GetAST();
@@ -167,17 +168,18 @@ int __cdecl main()
   std::cout << '\n';
 
   std::string_view fib = "                \
-  fun fib( int i )                        \
-  {                                       \
-    if( i <= 1 )                          \
-      return i;                           \
-    return fib( i - 2 ) + fib( i - 1 );   \
-  }                                       \
-  fun main()                              \
-  {                                       \
-    for( int i = 0; i < 10; i = i + 1 )   \
+  // fibonacci sequence                 \n\
+  fun fib( int i )                      \n\
+  {                                     \n\
+    if( i <= 1 )                        \n\
+      return i;                         \n\
+    return fib( i - 2 ) + fib( i - 1 ); \n\
+  }                                     \n\
+  fun main()                            \n\
+  {                                     \n\
+    for( int i = 0; i < 10; i = i + 1 ) \n\
       print 'fib(' + i + ') -> ' + fib(i);\
-  }                                       \
+  }                                     \n\
   main();";
 
   std::string_view exp = "    \
