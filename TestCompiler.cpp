@@ -219,12 +219,14 @@ int __cdecl main()
   test( !ast );
   std::cout << ast.error().GetErrorMessage() << "\n\n";
 
+  VirtualMachine vm;
   Chunk chunk;
   auto index = chunk.AddConstant( 1234 );
   chunk.Append( OpCode::Constant, 40 );
   chunk.Append( index, 40 );
   chunk.Append( OpCode::Return, 40 );
   chunk.Disassemble( "Test" );
+  vm.Interpret( &chunk );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
