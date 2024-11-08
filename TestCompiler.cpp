@@ -221,10 +221,23 @@ int __cdecl main()
 
   VirtualMachine vm;
   Chunk chunk;
-  auto index = chunk.AddConstant( 1234 );
-  chunk.Append( OpCode::Constant, 40 );
-  chunk.Append( index, 40 );
-  chunk.Append( OpCode::Return, 40 );
+  Chunk::LineCount line = 123;
+  auto constant = chunk.AddConstant( 12 );
+  chunk.Append( OpCode::Constant, line );
+  chunk.Append( constant, line );
+
+  constant = chunk.AddConstant( 34 );
+  chunk.Append( OpCode::Constant, line );
+  chunk.Append( constant, line );
+  chunk.Append( OpCode::Add, line );
+
+  constant = chunk.AddConstant( 6 );
+  chunk.Append( OpCode::Constant, line );
+  chunk.Append( constant, line );
+
+  chunk.Append( OpCode::Divide, line );
+  chunk.Append( OpCode::Negate, line );
+  chunk.Append( OpCode::Return, line );
   chunk.Disassemble( "Test" );
   vm.Interpret( &chunk );
 }
