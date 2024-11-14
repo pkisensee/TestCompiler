@@ -251,6 +251,12 @@ int __cdecl main()
   chunk.Append( OpCode::Return, line );
   chunk.Disassemble( "Test" );
   vm.Interpret( &chunk );
+
+  Compiler compiler;
+  chunk.Free();
+  compiler.Compile( "(42 + 1) / (2 * 3)", &chunk );
+  chunk.Disassemble( "(42 + 1) / (2 * 3)" );
+  vm.Interpret( &chunk );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
