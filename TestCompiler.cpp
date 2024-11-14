@@ -18,7 +18,18 @@
 #include <iostream>
 #include <sstream>
 
-#include "Compiler.h"
+//#include "AST.h"
+//#include "Callable.h"
+#include "Chunk.h"
+//#include "Environment.h"
+//#include "Expr.h"
+#include "Interpreter.h"
+//#include "Lexer.h"
+#include "Parser.h"
+//#include "Stmt.h"
+//#include "Token.h"
+#include "Value.h"
+#include "VirtualMachine.h"
 #include "Util.h"
 
 using namespace PKIsensee;
