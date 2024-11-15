@@ -233,16 +233,16 @@ int __cdecl main()
   VirtualMachine vm;
   Chunk chunk;
   Chunk::LineCount line = 123;
-  auto constant = chunk.AddConstant( 12 );
+  auto constant = chunk.AddConstant( Value{ 12 } );
   chunk.Append( OpCode::Constant, line );
   chunk.Append( constant, line );
 
-  constant = chunk.AddConstant( 34 );
+  constant = chunk.AddConstant( Value{ 34 } );
   chunk.Append( OpCode::Constant, line );
   chunk.Append( constant, line );
   chunk.Append( OpCode::Add, line );
 
-  constant = chunk.AddConstant( 6 );
+  constant = chunk.AddConstant( Value{ 6 } );
   chunk.Append( OpCode::Constant, line );
   chunk.Append( constant, line );
 
