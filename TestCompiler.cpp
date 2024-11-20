@@ -247,9 +247,16 @@ int __cdecl main()
 
   Compiler compiler;
   chunk.Free();
-  compiler.Compile( "(42 + 1) / (2 * 3)", &chunk );
-  chunk.Disassemble( "(42 + 1) / (2 * 3)" );
+  compiler.Compile( "(42 + 1) / (2 * 3) - 4", &chunk ); // 43/6 - 4 == 3
+  chunk.Disassemble( "Math ops" );
   vm.Interpret( &chunk );
+
+  chunk.Free();
+  //                   1   -   0   +     1    -        1            -    1   +     0     == 0
+  compiler.Compile( "(5>2) - (6<4) + (-7>=-7) - (3 == (3*(1 <= 8))) - !!true + !!false", &chunk ); 
+  chunk.Disassemble( "Logical ops" );
+  vm.Interpret( &chunk );
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
