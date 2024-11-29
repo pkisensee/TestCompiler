@@ -257,6 +257,16 @@ int __cdecl main()
   chunk.Disassemble( "Logical ops" );
   vm.Interpret( &chunk );
 
+  chunk.Free();
+  compiler.Compile( " 'foo' != 'goofball' ", &chunk ); // true
+  chunk.Disassemble( "String comparison" );
+  vm.Interpret( &chunk );
+
+  chunk.Free();
+  compiler.Compile( " 'foo' + 'goof' ", &chunk ); // 'foogoof'
+  chunk.Disassemble( "String addition" );
+  vm.Interpret( &chunk );
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
