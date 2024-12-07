@@ -243,29 +243,35 @@ int __cdecl main()
   chunk.Append( OpCode::Negate, line );
   chunk.Append( OpCode::Return, line );
   chunk.Disassemble( "Test" );
-  vm.Interpret( &chunk );
+  vm.Interpret( &chunk ); // -7
+
+  chunk.Free();
+  chunk.Disassemble( "Empty" );
 
   Compiler compiler;
-  chunk.Free();
-  compiler.Compile( "(42 + 1) / (2 * 3) - 4", &chunk ); // 43/6 - 4 == 3
+  compiler.Compile( "print (42 + 1) / (2 * 3) - 4;", &chunk ); // 43/6 - 4 == 3
   chunk.Disassemble( "Math ops" );
-  vm.Interpret( &chunk );
+  vm.Reset();
+  vm.Interpret( &chunk ); // 3
 
   chunk.Free();
   //                   1   -   0   +     1    -        1            -    1   +     0     == 0
-  compiler.Compile( "(5>2) - (6<4) + (-7>=-7) - (3 == (3*(1 <= 8))) - !!true + !!false", &chunk ); 
+  compiler.Compile( "print (5>2) - (6<4) + (-7>=-7) - (3 == (3*(1 <= 8))) - !!true + !!false;", &chunk ); 
   chunk.Disassemble( "Logical ops" );
-  vm.Interpret( &chunk );
+  vm.Reset();
+  vm.Interpret( &chunk ); // 0
 
   chunk.Free();
-  compiler.Compile( " 'foo' != 'goofball' ", &chunk ); // true
+  compiler.Compile( "print 'foo' != 'goofball' ;", &chunk ); // true
   chunk.Disassemble( "String comparison" );
-  vm.Interpret( &chunk );
+  vm.Reset();
+  vm.Interpret( &chunk ); // true
 
   chunk.Free();
-  compiler.Compile( " 'foo' + 'goof' ", &chunk ); // 'foogoof'
+  compiler.Compile( "print 'foo' + 'goof' ;", &chunk ); // 'foogoof'
   chunk.Disassemble( "String addition" );
-  vm.Interpret( &chunk );
+  vm.Reset();
+  vm.Interpret( &chunk ); // "foogoof"
 
 }
 
