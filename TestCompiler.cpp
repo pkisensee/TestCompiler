@@ -268,10 +268,10 @@ int __cdecl main()
   vm.Interpret( &chunk ); // true
 
   chunk.Free();
-  compiler.Compile( "print 'foo' + 'goof' ;", &chunk ); // 'foogoof'
+  compiler.Compile( "str bev = 'tea'; print 'beignets with ' + bev;", &chunk ); // 'beignets with tea'
   chunk.Disassemble( "String addition" );
   vm.Reset();
-  vm.Interpret( &chunk ); // "foogoof"
+  vm.Interpret( &chunk ); // "beignets with tea"
 
 }
 
