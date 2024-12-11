@@ -268,10 +268,15 @@ int __cdecl main()
   vm.Interpret( &chunk ); // true
 
   chunk.Free();
-  compiler.Compile( "str bev = 'tea'; print 'beignets with ' + bev;", &chunk ); // 'beignets with tea'
+  std::string_view bevvies =
+    "str bev = 'tea';\n"
+    "print 'beignets with ' + bev;\n"
+    "bev = 'coffee';\n"
+    "print 'beignets with ' + bev;";
+  compiler.Compile( bevvies, &chunk );
   chunk.Disassemble( "String addition" );
   vm.Reset();
-  vm.Interpret( &chunk ); // "beignets with tea"
+  vm.Interpret( &chunk ); // "beignets with tea/coffee"
 
 }
 
