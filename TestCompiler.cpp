@@ -353,6 +353,29 @@ int __cdecl main()
   vm.Reset();
   vm.Interpret( &chunk ); // 3
 
+  chunk.Free();
+  std::string_view forLoop =
+    "for (int c = 0; c < 3; c = c + 1) \n"
+    "  print c;                        \n"
+    ;
+  compiler.Compile( forLoop, &chunk );
+  chunk.Disassemble( "For" );
+  vm.Reset();
+  vm.Interpret( &chunk ); // 0 1 2
+
+  chunk.Free();
+  std::string_view emptyForLoop =
+    "int c = 0;       \n"
+    "for ( ; c < 3; ) \n"
+    "{                \n"
+    "  print c;       \n"
+    "  c = c + 1;     \n"
+    "}                \n"
+    ;
+  compiler.Compile( emptyForLoop, &chunk );
+  chunk.Disassemble( "Empty For" );
+  vm.Reset();
+  vm.Interpret( &chunk ); // 0 1 2
 }
 
 ///////////////////////////////////////////////////////////////////////////////
