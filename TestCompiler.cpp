@@ -278,6 +278,39 @@ int __cdecl main()
   vm.Reset();
   vm.Interpret( &chunk ); // "beignets with tea/coffee"
 
+  chunk.Free();
+  std::string_view locals =
+    "{\n"
+    "  int a = 1;\n"
+    "  {\n"
+    "    int a = 2;\n"
+    "    int b = 3;\n"
+    "    print a;\n"
+    "    print b;\n"
+    "  }\n"
+    "  print a;\n"
+    "}";
+  compiler.Compile( locals, &chunk );
+  chunk.Disassemble( "Locals" );
+  vm.Reset();
+  vm.Interpret( &chunk ); // 2, 3, 1
+
+  chunk.Free();
+  std::string_view branch =
+    "if ( 1 + 1 == 2)\n"
+    "  print '1+1 == 2';\n"
+    "else\n"
+    "  print '1+1 != 2';\n"
+    "if ( 2 == (1-1) )\n"
+    "  print '2 == 1-1';\n"
+    "else\n"
+    "  print '2 != 1-1';\n"
+    ;
+  compiler.Compile( branch, &chunk );
+  chunk.Disassemble( "Branch" );
+  vm.Reset();
+  vm.Interpret( &chunk ); // 1+1 == 2, 2 != 1-1
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
