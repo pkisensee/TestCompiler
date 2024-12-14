@@ -312,22 +312,46 @@ int __cdecl main()
   vm.Interpret( &chunk ); // 1+1 == 2, 2 != 1-1
 
   chunk.Free();
-  std::string_view orand =
+  std::string_view orCode =
+    "bool t = true;  \n"
+    "bool f = false; \n"
+    "print t or t;   \n"
+    "print t or f;   \n"
+    "print f or t;   \n"
+    "print f or f;   \n"
+    ;
+  compiler.Compile( orCode, &chunk );
+  chunk.Disassemble( "Or" );
+  vm.Reset();
+  vm.Interpret( &chunk ); // T T T F
+
+  chunk.Free();
+  std::string_view andCode =
     "bool t = true;  \n"
     "bool f = false; \n"
     "print t and t;  \n"
     "print t and f;  \n"
     "print f and t;  \n"
     "print f and f;  \n"
-    "print t or t;   \n"
-    "print t or f;   \n"
-    "print f or t;   \n"
-    "print f or f;   \n"
     ;
-  compiler.Compile( orand, &chunk );
-  chunk.Disassemble( "Or And" );
+  compiler.Compile( andCode, &chunk );
+  chunk.Disassemble( "And" );
   vm.Reset();
-  vm.Interpret( &chunk ); // T F F F T T T F
+  vm.Interpret( &chunk ); // T F F F
+
+  chunk.Free();
+  std::string_view whileLoop =
+    "int c = 0;     \n"
+    "while( c < 3 ) \n"
+    "{              \n"
+    "  c = c + 1;   \n"
+    "}              \n"
+    "print c;       \n"
+    ;
+  compiler.Compile( whileLoop, &chunk );
+  chunk.Disassemble( "While" );
+  vm.Reset();
+  vm.Interpret( &chunk ); // 3
 
 }
 
