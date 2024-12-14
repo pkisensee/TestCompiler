@@ -311,6 +311,24 @@ int __cdecl main()
   vm.Reset();
   vm.Interpret( &chunk ); // 1+1 == 2, 2 != 1-1
 
+  chunk.Free();
+  std::string_view orand =
+    "bool t = true;  \n"
+    "bool f = false; \n"
+    "print t and t;  \n"
+    "print t and f;  \n"
+    "print f and t;  \n"
+    "print f and f;  \n"
+    "print t or t;   \n"
+    "print t or f;   \n"
+    "print f or t;   \n"
+    "print f or f;   \n"
+    ;
+  compiler.Compile( orand, &chunk );
+  chunk.Disassemble( "Or And" );
+  vm.Reset();
+  vm.Interpret( &chunk ); // T F F F T T T F
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
