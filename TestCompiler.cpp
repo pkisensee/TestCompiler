@@ -318,6 +318,16 @@ int __cdecl main()
     ;
   vm.Reset();
   vm.Interpret( emptyForLoop ); // 0 1 2
+
+  std::string_view simpleFnCall =
+    "fun foo() {       \n"
+    "  print 'fnCall'; \n"
+    "}                 \n"
+    "                  \n"
+    "foo();            \n"
+    ;
+  vm.Reset();
+  vm.Interpret( simpleFnCall ); // "fnCall"
 }
 
 ///////////////////////////////////////////////////////////////////////////////
