@@ -224,61 +224,23 @@ int __cdecl main()
   std::cout << ast.error().GetErrorMessage() << "\n\n";
 
   VirtualMachine vm;
-  Chunk chunk;
-  Chunk::LineCount line = 123;
-  auto constant = chunk.AddConstant( Value{ 12 } );
-  chunk.Append( OpCode::Constant, line );
-  chunk.Append( constant, line );
+  vm.Interpret( "print (42 + 1) / (2 * 3) - 4;" ); // 3
 
-  constant = chunk.AddConstant( Value{ 34 } );
-  chunk.Append( OpCode::Constant, line );
-  chunk.Append( constant, line );
-  chunk.Append( OpCode::Add, line );
-
-  constant = chunk.AddConstant( Value{ 6 } );
-  chunk.Append( OpCode::Constant, line );
-  chunk.Append( constant, line );
-
-  chunk.Append( OpCode::Divide, line );
-  chunk.Append( OpCode::Negate, line );
-  chunk.Append( OpCode::Return, line );
-  chunk.Disassemble( "Test" );
-  vm.Interpret( &chunk ); // -7
-
-  chunk.Free();
-  chunk.Disassemble( "Empty" );
-
-  Compiler compiler;
-  compiler.Compile( "print (42 + 1) / (2 * 3) - 4;", &chunk ); // 43/6 - 4 == 3
-  chunk.Disassemble( "Math ops" );
-  vm.Reset();
-  vm.Interpret( &chunk ); // 3
-
-  chunk.Free();
   //                   1   -   0   +     1    -        1            -    1   +     0     == 0
-  compiler.Compile( "print (5>2) - (6<4) + (-7>=-7) - (3 == (3*(1 <= 8))) - !!true + !!false;", &chunk ); 
-  chunk.Disassemble( "Logical ops" );
   vm.Reset();
-  vm.Interpret( &chunk ); // 0
+  vm.Interpret( "print (5>2) - (6<4) + (-7>=-7) - (3 == (3*(1 <= 8))) - !!true + !!false;" ); // 0
 
-  chunk.Free();
-  compiler.Compile( "print 'foo' != 'goofball' ;", &chunk ); // true
-  chunk.Disassemble( "String comparison" );
   vm.Reset();
-  vm.Interpret( &chunk ); // true
+  vm.Interpret( "print 'foo' != 'goofball' ;" ); // true
 
-  chunk.Free();
   std::string_view bevvies =
     "str bev = 'tea';\n"
     "print 'beignets with ' + bev;\n"
     "bev = 'coffee';\n"
     "print 'beignets with ' + bev;";
-  compiler.Compile( bevvies, &chunk );
-  chunk.Disassemble( "String addition" );
   vm.Reset();
-  vm.Interpret( &chunk ); // "beignets with tea/coffee"
+  vm.Interpret( bevvies ); // "beignets with tea/coffee"
 
-  chunk.Free();
   std::string_view locals =
     "{\n"
     "  int a = 1;\n"
@@ -290,12 +252,9 @@ int __cdecl main()
     "  }\n"
     "  print a;\n"
     "}";
-  compiler.Compile( locals, &chunk );
-  chunk.Disassemble( "Locals" );
   vm.Reset();
-  vm.Interpret( &chunk ); // 2, 3, 1
+  vm.Interpret( locals ); // 2, 3, 1
 
-  chunk.Free();
   std::string_view branch =
     "if ( 1 + 1 == 2)\n"
     "  print '1+1 == 2';\n"
@@ -306,12 +265,9 @@ int __cdecl main()
     "else\n"
     "  print '2 != 1-1';\n"
     ;
-  compiler.Compile( branch, &chunk );
-  chunk.Disassemble( "Branch" );
   vm.Reset();
-  vm.Interpret( &chunk ); // 1+1 == 2, 2 != 1-1
+  vm.Interpret( branch ); // 1+1 == 2, 2 != 1-1
 
-  chunk.Free();
   std::string_view orCode =
     "bool t = true;  \n"
     "bool f = false; \n"
@@ -320,12 +276,9 @@ int __cdecl main()
     "print f or t;   \n"
     "print f or f;   \n"
     ;
-  compiler.Compile( orCode, &chunk );
-  chunk.Disassemble( "Or" );
   vm.Reset();
-  vm.Interpret( &chunk ); // T T T F
+  vm.Interpret( orCode ); // T T T F
 
-  chunk.Free();
   std::string_view andCode =
     "bool t = true;  \n"
     "bool f = false; \n"
@@ -334,12 +287,9 @@ int __cdecl main()
     "print f and t;  \n"
     "print f and f;  \n"
     ;
-  compiler.Compile( andCode, &chunk );
-  chunk.Disassemble( "And" );
   vm.Reset();
-  vm.Interpret( &chunk ); // T F F F
+  vm.Interpret( andCode ); // T F F F
 
-  chunk.Free();
   std::string_view whileLoop =
     "int c = 0;     \n"
     "while( c < 3 ) \n"
@@ -348,22 +298,16 @@ int __cdecl main()
     "}              \n"
     "print c;       \n"
     ;
-  compiler.Compile( whileLoop, &chunk );
-  chunk.Disassemble( "While" );
   vm.Reset();
-  vm.Interpret( &chunk ); // 3
+  vm.Interpret( whileLoop ); // 3
 
-  chunk.Free();
   std::string_view forLoop =
     "for (int c = 0; c < 3; c = c + 1) \n"
     "  print c;                        \n"
     ;
-  compiler.Compile( forLoop, &chunk );
-  chunk.Disassemble( "For" );
   vm.Reset();
-  vm.Interpret( &chunk ); // 0 1 2
+  vm.Interpret( forLoop ); // 0 1 2
 
-  chunk.Free();
   std::string_view emptyForLoop =
     "int c = 0;       \n"
     "for ( ; c < 3; ) \n"
@@ -372,10 +316,8 @@ int __cdecl main()
     "  c = c + 1;     \n"
     "}                \n"
     ;
-  compiler.Compile( emptyForLoop, &chunk );
-  chunk.Disassemble( "Empty For" );
   vm.Reset();
-  vm.Interpret( &chunk ); // 0 1 2
+  vm.Interpret( emptyForLoop ); // 0 1 2
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -71,16 +71,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\Compiler;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\ArrayStack;..\Compiler;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\Compiler;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\ArrayStack;..\Compiler;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\Compiler;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\ArrayStack;..\Compiler;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\Compiler;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\ArrayStack;..\Compiler;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -162,6 +162,9 @@
     <ClCompile Include="TestCompiler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ArrayStack\ArrayStack.vcxproj">
+      <Project>{3e27fca8-ac64-4143-bce3-31a94ca80eb9}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Compiler\Compiler.vcxproj">
       <Project>{358724b2-f402-4695-97ab-3e8e7ec9d4d1}</Project>
     </ProjectReference>
