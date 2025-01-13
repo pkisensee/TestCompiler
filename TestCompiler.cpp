@@ -328,6 +328,9 @@ int __cdecl main()
     ;
   vm.Reset();
   vm.Interpret( simpleFnCall ); // "fnCall"
+
+  vm.Reset();
+  //vm.Interpret( fib );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
