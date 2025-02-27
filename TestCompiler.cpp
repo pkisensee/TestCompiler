@@ -319,7 +319,35 @@ int __cdecl main()
   vm.Reset();
   vm.Interpret( emptyForLoop ); // 0 1 2
 
-  std::string_view simpleFnCall =
+  std::string_view nativeFnCall1 =
+    "int start = clock();        \n"
+    "print 'start';              \n"
+    "int end = clock();          \n"
+    "print 'end=' + (end-start); \n"
+    ;
+  vm.Reset();
+  vm.Interpret( nativeFnCall1 ); // "end=[nanoseconds]"
+
+  std::string_view nativeFnCall2 =
+    "int start = clock();        \n"
+    "print square(42);           \n"
+    "int end = clock();          \n"
+    "print 'end=' + (end-start); \n"
+    ;
+  vm.Reset();
+  vm.Interpret( nativeFnCall2 ); // "1764 end=[nanoseconds]"
+
+  std::string_view simpleFnCall1 =
+    "fun sum(int a, int b) { \n"
+    "  return a + b;         \n"
+    "}                       \n"
+    "                        \n"
+    "print 4 + sum(42, 3);   \n"
+    ;
+  vm.Reset();
+  //vm.Interpret( simpleFnCall1 ); // "fnCall"
+
+  std::string_view simpleFnCall2 =
     "fun foo() {       \n"
     "  print 'fnCall'; \n"
     "}                 \n"
@@ -327,7 +355,7 @@ int __cdecl main()
     "foo();            \n"
     ;
   vm.Reset();
-  vm.Interpret( simpleFnCall ); // "fnCall"
+  //vm.Interpret( simpleFnCall2 ); // "fnCall"
 
   vm.Reset();
   //vm.Interpret( fib );
