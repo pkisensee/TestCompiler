@@ -35,6 +35,12 @@ using namespace PKIsensee;
 
 int __cdecl main()
 {
+  /*
+  _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF |        // enable debug heap allocations
+                  _CRTDBG_DELAY_FREE_MEM_DF |   // enable detect of use after free
+                  _CRTDBG_LEAK_CHECK_DF |       // enable leak checking at program exit
+                  _CRTDBG_CHECK_ALWAYS_DF );    // call _CrtCheckMemory at every alloc/free
+  */
   Parser parser;
 
   parser.Parse( "[80s Pop]{ Genre=='Pop' and Year > 1990 and Year<=2000 }" );
