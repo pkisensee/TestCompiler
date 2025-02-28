@@ -329,7 +329,7 @@ int __cdecl main()
     "int start = clock();        \n"
     "print 'start';              \n"
     "int end = clock();          \n"
-    "print 'end=' + (end-start); \n"
+    "print 'elapsed=' + (end-start); \n"
     ;
   vm.Reset();
   vm.Interpret( nativeFnCall1 ); // "end=[nanoseconds]"
@@ -338,7 +338,7 @@ int __cdecl main()
     "int start = clock();        \n"
     "print square(42);           \n"
     "int end = clock();          \n"
-    "print 'end=' + (end-start); \n"
+    "print 'elapsed=' + (end-start); \n"
     ;
   vm.Reset();
   vm.Interpret( nativeFnCall2 ); // "1764 end=[nanoseconds]"
