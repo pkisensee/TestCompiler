@@ -187,9 +187,10 @@ int __cdecl main()
   }                                     \n\
   fun main()                            \n\
   {                                     \n\
-    for( int i = 0; i < 3; i = i + 1 ) \n\
-  //    print 'fib(' + i + ') -> ' + fib(i);\n\
-      print fib(i);                     \n\
+    int start = clock();                \n\
+    for( int i = 0; i < 10; i = i + 1 ) \n\
+      print 'fib(' + i + ') -> ' + fib(i);\n\
+    print 'fib time=' + (clock()-start) + ' ns';\n\
   }                                     \n\
   main();";
 
@@ -365,7 +366,7 @@ int __cdecl main()
   vm.Interpret( simpleFnCall2 ); // "fnCall"
 
   vm.Reset();
-  //vm.Interpret( fib );
+  vm.Interpret( fib ); // 0,1,1,2,3,5,8,13,21,34
 }
 
 ///////////////////////////////////////////////////////////////////////////////
