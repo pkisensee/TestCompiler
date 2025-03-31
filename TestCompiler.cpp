@@ -187,8 +187,9 @@ int __cdecl main()
   }                                     \n\
   fun main()                            \n\
   {                                     \n\
-    for( int i = 0; i < 10; i = i + 1 ) \n\
-      print 'fib(' + i + ') -> ' + fib(i);\
+    for( int i = 0; i < 3; i = i + 1 ) \n\
+  //    print 'fib(' + i + ') -> ' + fib(i);\n\
+      print fib(i);                     \n\
   }                                     \n\
   main();";
 
@@ -351,7 +352,7 @@ int __cdecl main()
     "print 4 + sum(42, 3);   \n"
     ;
   vm.Reset();
-  //vm.Interpret( simpleFnCall1 ); // "fnCall"
+  vm.Interpret( simpleFnCall1 ); // 49
 
   std::string_view simpleFnCall2 =
     "fun foo() {       \n"
@@ -361,7 +362,7 @@ int __cdecl main()
     "foo();            \n"
     ;
   vm.Reset();
-  //vm.Interpret( simpleFnCall2 ); // "fnCall"
+  vm.Interpret( simpleFnCall2 ); // "fnCall"
 
   vm.Reset();
   //vm.Interpret( fib );
