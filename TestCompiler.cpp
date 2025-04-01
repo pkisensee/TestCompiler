@@ -372,7 +372,7 @@ int __cdecl main()
   vm.Reset();
   std::string intToHex;
   File::ReadEntireFile( "IntToHex.c", intToHex );
-  vm.Interpret(intToHex);
+  vm.Interpret(intToHex); // "empty",50,65,51,48,51,57
 }
 
 ///////////////////////////////////////////////////////////////////////////////
