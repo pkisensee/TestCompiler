@@ -3,4 +3,7 @@
   <ItemGroup>
     <ClCompile Include="TestCompiler.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="IntToHex.c" />
+  </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@
 #include <sstream>
 
 #include "Chunk.h"
+#include "File.h"
 #include "Interpreter.h"
 #include "Parser.h"
 #include "Value.h"
@@ -367,6 +368,11 @@ int __cdecl main()
 
   vm.Reset();
   vm.Interpret( fib ); // 0,1,1,2,3,5,8,13,21,34
+
+  vm.Reset();
+  std::string intToHex;
+  File::ReadEntireFile( "IntToHex.c", intToHex );
+  vm.Interpret(intToHex);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
