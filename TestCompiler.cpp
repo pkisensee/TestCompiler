@@ -128,13 +128,13 @@ int __cdecl main()
   strStream << *ast;
   std::cout << strStream.str();
   test( strStream.str() ==
-        "/ [Divide]\n"
-        "  + [Plus]\n"
-        "    42\n"
-        "    1\n"
-        "  * [Multiply]\n"
-        "    2\n"
-        "    3\n" );
+    "/ [Divide]\n"
+    "  + [Plus]\n"
+    "    42\n"
+    "    1\n"
+    "  * [Multiply]\n"
+    "    2\n"
+    "    3\n" );
   Interpreter interpreter;
   Value result = interpreter.Evaluate( ast->GetRoot() );
   std::cout << "Result: " << result << '\n';
@@ -372,7 +372,26 @@ int __cdecl main()
   vm.Reset();
   std::string intToHex;
   File::ReadEntireFile( "IntToHex.c", intToHex );
-  vm.Interpret(intToHex); // "empty",50,65,51,48,51,57
+  vm.Interpret( intToHex ); // "empty",50,65,51,48,51,57
+
+  std::string_view captures1 =
+    "fun outer() {\n"
+    "int a = 1;\n"
+    "int b = 2;\n"
+    "fun middle() {\n"
+    "  int c = 3;\n"
+    "  int d = 4;\n"
+    "  fun inner() {\n"
+    "    print a + c + b + d;\n"
+    "  }\n"
+    " }\n"
+    "}\n"
+    ;
+  vm.Reset();
+  vm.Interpret( captures1 );
+
+  // TODO add support for assigning a function to a function, e.g. fun fn = foo();
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
