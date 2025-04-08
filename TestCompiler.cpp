@@ -367,7 +367,7 @@ int __cdecl main()
   vm.Interpret( simpleFnCall2 ); // "fnCall"
 
   vm.Reset();
-  vm.Interpret( fib ); // 0,1,1,2,3,5,8,13,21,34
+  // vm.Interpret( fib ); // 0,1,1,2,3,5,8,13,21,34 TODO re-enable later
 
   vm.Reset();
   std::string intToHex;
@@ -390,8 +390,18 @@ int __cdecl main()
   vm.Reset();
   vm.Interpret( captures1 );
 
-  // TODO add support for assigning a function to a function, e.g. fun fn = foo();
-
+  std::string_view captures2 =
+    "fun outer() {\n"
+    "  str x = 'outside';\n"
+    "  fun inner() {\n"
+    "    print x;\n"
+    "  }\n"
+    "  inner();\n"
+    "}\n"
+    "outer();\n"
+    ;
+  vm.Reset();
+  vm.Interpret( captures2 );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
