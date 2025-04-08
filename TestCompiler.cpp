@@ -376,19 +376,22 @@ int __cdecl main()
 
   std::string_view captures1 =
     "fun outer() {\n"
-    "int a = 1;\n"
-    "int b = 2;\n"
-    "fun middle() {\n"
-    "  int c = 3;\n"
-    "  int d = 4;\n"
-    "  fun inner() {\n"
-    "    print a + c + b + d;\n"
+    "  int a = 1;\n"
+    "  int b = 2;\n"
+    "  fun middle() {\n"
+    "    int c = 3;\n"
+    "    int d = 4;\n"
+    "    fun inner() {\n"
+    "      print a + c + b + d;\n"
+    "    }\n"
+    "    inner();\n"
     "  }\n"
-    " }\n"
+    "  middle();\n"
     "}\n"
+    "outer();\n"
     ;
   vm.Reset();
-  vm.Interpret( captures1 );
+  vm.Interpret( captures1 ); // 10
 
   std::string_view captures2 =
     "fun outer() {\n"
@@ -401,7 +404,38 @@ int __cdecl main()
     "outer();\n"
     ;
   vm.Reset();
-  vm.Interpret( captures2 );
+  vm.Interpret( captures2 ); // "outside"
+
+  std::string_view funref1 =
+    "fun printVal(str value) {\n"
+    "  fun inner() {\n"
+    "    print value;\n"
+    "  }\n"
+    "  return inner;\n"
+    " }\n"
+    "funref doughnut = printVal('doughnut');\n"
+    "funref bagel = printVal('bagel');\n"
+    "doughnut();\n"
+    "bagel();\n"
+    ;
+  vm.Reset();
+  vm.Interpret( funref1 ); // "doughnut bagel"
+
+  /*
+  std::string_view captures3 =
+    "fun outer() {\n"
+    "  str x = 'outside';\n"
+    "  fun inner() {\n"
+    "    print x;\n"
+    "  }\n"
+    "  return inner();\n"
+    "}\n"
+    "funref closure = outer();\n"
+    "closure();\n"
+    ;
+  vm.Reset();
+  vm.Interpret( captures3 ); // "outside"
+  */
 }
 
 ///////////////////////////////////////////////////////////////////////////////
