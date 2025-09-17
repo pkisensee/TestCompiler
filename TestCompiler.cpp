@@ -215,7 +215,7 @@ int __cdecl main()
   std::string_view eightiesPop = "  \
   fun IsEightiesPop()               \
   {                                 \
-    return ( genre == 'Rock' );     \
+    return ( genre() == 'Rock' );     \
   }                                 \
   print IsEightiesPop();";
 
@@ -436,6 +436,10 @@ int __cdecl main()
   vm.Reset();
   vm.Interpret( captures3 ); // "outside"
   */
+
+  vm.Reset();
+  vm.Interpret( eightiesPop );
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
