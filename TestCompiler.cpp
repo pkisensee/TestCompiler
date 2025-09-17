@@ -18,7 +18,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "Chunk.h"
+#include "ByteCodeBlock.h"
 #include "File.h"
 #include "Interpreter.h"
 #include "Parser.h"
