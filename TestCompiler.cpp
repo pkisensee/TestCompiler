@@ -233,14 +233,17 @@ int __cdecl main()
   std::cout << ast.error().GetErrorMessage() << "\n\n";
 
   VirtualMachine vm;
-  vm.Interpret( "print (42 + 1) / (2 * 3) - 4;" ); // 3
+  vm.Interpret( "print (42 + 1) / (2 * 3) - 4;" );
+  test( vm.GetOutput() == "3" );
 
   //                   1   -   0   +     1    -        1            -    1   +     0     == 0
   vm.Reset();
   vm.Interpret( "print (5>2) - (6<4) + (-7>=-7) - (3 == (3*(1 <= 8))) - !!true + !!false;" ); // 0
+  test( vm.GetOutput() == "0" );
 
   vm.Reset();
-  vm.Interpret( "print 'foo' != 'goofball' ;" ); // true
+  vm.Interpret( "print 'foo' != 'goofball' ;" );
+  test( vm.GetOutput() == "true" );
 
   std::string_view bevvies =
     "str bev = 'tea';\n"
@@ -248,7 +251,8 @@ int __cdecl main()
     "bev = 'coffee';\n"
     "print 'beignets with ' + bev;";
   vm.Reset();
-  vm.Interpret( bevvies ); // "beignets with tea/coffee"
+  vm.Interpret( bevvies );
+  test( vm.GetOutput() == "beignets with tea\nbeignets with coffee" );
 
   std::string_view locals =
     "{\n"
@@ -262,7 +266,8 @@ int __cdecl main()
     "  print a;\n"
     "}";
   vm.Reset();
-  vm.Interpret( locals ); // 2, 3, 1
+  vm.Interpret( locals );
+  test( vm.GetOutput() == "2\n3\n1" );
 
   std::string_view branch =
     "if ( 1 + 1 == 2)\n"
@@ -275,7 +280,8 @@ int __cdecl main()
     "  print '2 != 1-1';\n"
     ;
   vm.Reset();
-  vm.Interpret( branch ); // 1+1 == 2, 2 != 1-1
+  vm.Interpret( branch );
+  test( vm.GetOutput() == "1+1 == 2\n2 != 1-1" );
 
   std::string_view orCode =
     "bool t = true;  \n"
@@ -286,7 +292,8 @@ int __cdecl main()
     "print f or f;   \n"
     ;
   vm.Reset();
-  vm.Interpret( orCode ); // T T T F
+  vm.Interpret( orCode );
+  test( vm.GetOutput() == "true\ntrue\ntrue\nfalse" );
 
   std::string_view andCode =
     "bool t = true;  \n"
@@ -297,7 +304,8 @@ int __cdecl main()
     "print f and f;  \n"
     ;
   vm.Reset();
-  vm.Interpret( andCode ); // T F F F
+  vm.Interpret( andCode );
+  test( vm.GetOutput() == "true\nfalse\nfalse\nfalse" );
 
   std::string_view whileLoop =
     "int c = 0;     \n"
@@ -308,14 +316,16 @@ int __cdecl main()
     "print c;       \n"
     ;
   vm.Reset();
-  vm.Interpret( whileLoop ); // 3
+  vm.Interpret( whileLoop );
+  test( vm.GetOutput() == "3" );
 
   std::string_view forLoop =
     "for (int c = 0; c < 3; c = c + 1) \n"
     "  print c;                        \n"
     ;
   vm.Reset();
-  vm.Interpret( forLoop ); // 0 1 2
+  vm.Interpret( forLoop );
+  test( vm.GetOutput() == "0\n1\n2" );
 
   std::string_view emptyForLoop =
     "int c = 0;       \n"
@@ -326,7 +336,8 @@ int __cdecl main()
     "}                \n"
     ;
   vm.Reset();
-  vm.Interpret( emptyForLoop ); // 0 1 2
+  vm.Interpret( emptyForLoop );
+  test( vm.GetOutput() == "0\n1\n2" );
 
   std::string_view nativeFnCall1 =
     "int start = clock();        \n"
@@ -335,7 +346,9 @@ int __cdecl main()
     "print 'elapsed=' + (end-start); \n"
     ;
   vm.Reset();
-  vm.Interpret( nativeFnCall1 ); // "end=[nanoseconds]"
+  vm.Interpret( nativeFnCall1 );
+  test( vm.GetOutput().starts_with( "start\nelapsed=" ) );
+  test( std::isdigit( vm.GetOutput()[ 14 ] ) );
 
   std::string_view nativeFnCall2 =
     "int start = clock();        \n"
@@ -344,7 +357,9 @@ int __cdecl main()
     "print 'elapsed=' + (end-start); \n"
     ;
   vm.Reset();
-  vm.Interpret( nativeFnCall2 ); // "1764 end=[nanoseconds]"
+  vm.Interpret( nativeFnCall2 );
+  test( vm.GetOutput().starts_with( "1764\nelapsed=" ) );
+  test( std::isdigit( vm.GetOutput()[ 14 ] ) );
 
   std::string_view simpleFnCall1 =
     "fun sum(int a, int b) { \n"
@@ -354,7 +369,8 @@ int __cdecl main()
     "print 4 + sum(42, 3);   \n"
     ;
   vm.Reset();
-  vm.Interpret( simpleFnCall1 ); // 49
+  vm.Interpret( simpleFnCall1 );
+  test( vm.GetOutput() == "49" );
 
   std::string_view simpleFnCall2 =
     "fun foo() {       \n"
@@ -364,15 +380,18 @@ int __cdecl main()
     "foo();            \n"
     ;
   vm.Reset();
-  vm.Interpret( simpleFnCall2 ); // "fnCall"
+  vm.Interpret( simpleFnCall2 );
+  test( vm.GetOutput() == "fnCall" );
 
   vm.Reset();
   // vm.Interpret( fib ); // 0,1,1,2,3,5,8,13,21,34 TODO re-enable later
+  test( vm.GetOutput() == "" );
 
   vm.Reset();
   std::string intToHex;
   File::ReadEntireFile( "IntToHex.c", intToHex );
-  vm.Interpret( intToHex ); // "empty",50,65,51,48,51,57
+  vm.Interpret( intToHex );
+  test( vm.GetOutput() == "empty\n50\n65\n51\n48\n51\n57" );
 
   std::string_view captures1 =
     "fun outer() {\n"
@@ -391,7 +410,8 @@ int __cdecl main()
     "outer();\n"
     ;
   vm.Reset();
-  vm.Interpret( captures1 ); // 10
+  vm.Interpret( captures1 );
+  test( vm.GetOutput() == "10" );
 
   std::string_view captures2 =
     "fun outer() {\n"
@@ -404,7 +424,8 @@ int __cdecl main()
     "outer();\n"
     ;
   vm.Reset();
-  vm.Interpret( captures2 ); // "outside"
+  vm.Interpret( captures2 );
+  test( vm.GetOutput() == "outside" );
 
   std::string_view funref1 =
     "fun printVal(str value) {\n"
@@ -419,7 +440,8 @@ int __cdecl main()
     "bagel();\n"
     ;
   vm.Reset();
-  vm.Interpret( funref1 ); // "doughnut bagel"
+  vm.Interpret( funref1 );
+  test( vm.GetOutput() == "doughnut\nbagel" );
 
   /*
   std::string_view captures3 =
@@ -439,6 +461,7 @@ int __cdecl main()
 
   vm.Reset();
   vm.Interpret( eightiesPop );
+  test( vm.GetOutput() == "true" );
 
 }
 
