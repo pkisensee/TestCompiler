@@ -178,21 +178,21 @@ int __cdecl main()
   test( result == Value{ 1 } );
   std::cout << '\n';
 
-  std::string_view fib = "                \
-  // fibonacci sequence                 \n\
-  fun fib( int i )                      \n\
-  {                                     \n\
-    if( i <= 1 )                        \n\
-      return i;                         \n\
-    return fib( i - 2 ) + fib( i - 1 ); \n\
-  }                                     \n\
-  fun main()                            \n\
-  {                                     \n\
-    int start = clock();                \n\
-    for( int i = 0; i < 10; i = i + 1 ) \n\
-      print 'fib(' + i + ') -> ' + fib(i);\n\
+  std::string_view fib = "                      \
+  // fibonacci sequence                         \n\
+  fun fib( int i )                              \n\
+  {                                             \n\
+    if( i <= 1 )                                \n\
+      return i;                                 \n\
+    return fib( i - 2 ) + fib( i - 1 );         \n\
+  }                                             \n\
+  fun main()                                    \n\
+  {                                             \n\
+    int start = clock();                        \n\
+    for( int i = 0; i < 6; i = i + 1 )          \n\
+      print 'fib(' + i + ') -> ' + fib(i);      \n\
     print 'fib time=' + (clock()-start) + ' ns';\n\
-  }                                     \n\
+  }                                             \n\
   main();";
 
   std::string_view exp = "    \
@@ -384,8 +384,14 @@ int __cdecl main()
   test( vm.GetOutput() == "fnCall" );
 
   vm.Reset();
-  // vm.Interpret( fib ); // 0,1,1,2,3,5,8,13,21,34 TODO re-enable later
-  test( vm.GetOutput() == "" );
+  vm.Interpret( fib );
+  test( vm.GetOutput().starts_with( "fib(0) -> 0\n"
+                                    "fib(1) -> 1\n"
+                                    "fib(2) -> 1\n"
+                                    "fib(3) -> 2\n"
+                                    "fib(4) -> 3\n"
+                                    "fib(5) -> 5\n"
+                                    "fib time=") );
 
   vm.Reset();
   std::string intToHex;
@@ -443,7 +449,6 @@ int __cdecl main()
   vm.Interpret( funref1 );
   test( vm.GetOutput() == "doughnut\nbagel" );
 
-  /*
   std::string_view captures3 =
     "fun outer() {\n"
     "  str x = 'outside';\n"
@@ -456,8 +461,8 @@ int __cdecl main()
     "closure();\n"
     ;
   vm.Reset();
-  vm.Interpret( captures3 ); // "outside"
-  */
+  // vm.Interpret( captures3 ); // TODO
+  // test( vm.GetOutput() == "outside" );
 
   vm.Reset();
   vm.Interpret( eightiesPop );
