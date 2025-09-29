@@ -71,22 +71,22 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\ArrayStack;..\Compiler;..\File;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\InplaceVector;..\Compiler;..\File;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\ArrayStack;..\Compiler;..\File;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\InplaceVector;..\Compiler;..\File;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\ArrayStack;..\Compiler;..\File;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\InplaceVector;..\Compiler;..\File;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\ArrayStack;..\Compiler;..\File;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\InplaceVector;..\Compiler;..\File;..\Util;..\String;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
   </PropertyGroup>
@@ -180,14 +180,14 @@
     <ClCompile Include="TestCompiler.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ArrayStack\ArrayStack.vcxproj">
-      <Project>{3e27fca8-ac64-4143-bce3-31a94ca80eb9}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Compiler\Compiler.vcxproj">
       <Project>{358724b2-f402-4695-97ab-3e8e7ec9d4d1}</Project>
     </ProjectReference>
     <ProjectReference Include="..\File\File.vcxproj">
       <Project>{a2a617b6-2015-48e9-bf8b-76e18fdc0043}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\InplaceVector\InplaceVector.vcxproj">
+      <Project>{7ea3a650-e7d2-41e6-9dfa-fff3b8e68882}</Project>
     </ProjectReference>
     <ProjectReference Include="..\String\String.vcxproj">
       <Project>{cd2abb7c-efea-4f49-90f3-3b2337e81b11}</Project>
